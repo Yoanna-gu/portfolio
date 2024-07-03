@@ -1,0 +1,190 @@
+openapi: 3.0.2
+info:
+  title: Система управления заявками OpenAPI спецификация
+  version: 0.0.1
+servers: 
+  - url:  http://Server/data/htdocs
+paths:
+  /applications:
+    get:
+      summary: Получение всех заявок
+      operationId: wiew all applications
+      responses:
+        '200':
+          description: Успешный ответ со списком заявок
+          content:
+            application/json:
+               schema:
+                $ref: "#/components/schemas/applications"
+        '404':
+          description: Ресурс не найден по указанному пути
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Not Found
+        '400':
+          description: Ошибка в запрпосе
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Bad Request
+    post:
+      summary: Регистрация заявки
+      operationId: add new application
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/application"
+      responses:
+        '201':
+          description: Новая заявка успешно зарегистрирована
+          content: 
+            application/json:
+              schema:
+                type: string
+                example: 'Application is successfully registrated'
+        '400':
+          description: Ошибка в запрпосе
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Bad Request
+  /applications/{id}:
+    get:
+      summary: Получение конкретной заявки
+      parameters:
+        - in: path
+          name: id
+          description: Идентификатор заявки
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Успешный ответ с запрашиваемой заявкой
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/application"
+        '404':
+          description: Ресурс не найден по указанному пути
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Not Found
+        '400':
+          description: Ошибка в запрпосе
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Bad Request
+    put:
+      summary: Обработка заявки
+      parameters:
+        - in: path
+          name: id
+          description: Идентификатор заявки
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/application"
+      responses:
+        '200':
+          description: Заявка обработана
+          content:
+            application/json:
+              schema:
+                type: string
+                example: 'Application is successfully processed'
+        '400':
+          description: Ошибка в запрпосе
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Bad Request
+    delete:
+      summary: Удаление заявки
+      parameters:
+        - in: path
+          name: id
+          description: Идентификатор заявки
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Заявка удалена
+          content:
+            application/json:
+              schema:
+                type: string
+                example: 'Application is successfully deleted'
+        '400':
+          description: Ошибка в запрпосе
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Bad Request
+components:
+  schemas:
+    application:
+      type: object
+      required:
+        - 'id'
+        - 'date'
+        - 'sources'
+        - 'type_of_work'
+        - 'customer'
+        - 'object'
+        - 'adress'
+        - 'type_of_object'
+        - 'solution'
+      properties:
+        id:
+          type: integer
+          example: 12
+        date:
+          type: string
+          example: '2024-02-08'
+        sources:
+          type: string
+          example: 'call-center'
+        type_of_work:
+          type: string
+          example: 'full'
+        customer:
+          type: string
+          example: 'some_company'
+        object:
+          type: string
+          example: 'office'
+        adress:
+          type: string
+          example: 'Opticov, 37'
+        type_of_object:
+          type: string
+          example: 'hard'
+        solution:
+          type: boolean
+          example: true
+    applications:
+      type: array
+      items: 
+        $ref: "#/components/schemas/application"
