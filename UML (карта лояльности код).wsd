@@ -1,0 +1,34 @@
+@startuml Получение данных о покупателе при сканировании карты лояльности
+    autonumber
+
+    actor Покупатель
+    actor Кассир
+
+    participant КассоваяПрограмма
+    participant LoyaltyBrand
+
+    activate Покупатель
+        Покупатель -> Кассир: предоставляет карту
+
+    activate Кассир
+        Кассир -> КассоваяПрограмма: сканирует карту
+        
+    activate КассоваяПрограмма
+        КассоваяПрограмма -> LoyaltyBrand: Запрос GetCustomerInfo (cardNumber)
+
+    activate LoyaltyBrand
+        LoyaltyBrand -> LoyaltyBrand: обработка запроса
+        LoyaltyBrand --> КассоваяПрограмма: Ответ GetCustomerInfo (cardNumber, cardType, clientID, errorCode, fio)
+    deactivate LoyaltyBrand
+
+    alt Ответ успешный
+        КассоваяПрограмма --> Кассир: отображение информации о покупателе
+
+    else Ответ отличается от успешного
+        КассоваяПрограмма -> Кассир: отображение информации об ошибке
+    end  
+        Кассир --> Покупатель: Информирует покупателя о результате
+    deactivate КассоваяПрограмма
+    deactivate Кассир
+    deactivate Покупатель
+@enduml
